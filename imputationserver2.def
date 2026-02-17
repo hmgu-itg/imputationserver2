@@ -89,4 +89,4 @@ From: ubuntu:24.04
 	add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
 	apt update
 	DEBIAN_FRONTEND="noninteractive" apt install -y r-base
-	Rscript --vanilla -e "install.packages(c(\"markdown\",\"ggplot2\",\"htmltools\",\"dplyr\",\"dt\",\"tidyr\",\"rmdformats\"),repos = \"http://cran.us.r-project.org\")"
+	Rscript --vanilla -e "install.packages(c(\"markdown\",\"ggplot2\",\"htmltools\",\"dplyr\",\"DT\",\"tidyr\",\"rmdformats\",\"stringr\",\"knitr\",\"glue\"),repos = \"http://cran.us.r-project.org\")"
