@@ -1,0 +1,92 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+%environment
+        TZ=Europe/Berlin
+        LC_ALL=C
+        export LC_ALL
+	export PATH=/opt/impute5_v1.2.0:/opt/shapeit_5.1.1:/opt/eagle_2.4.1/:/opt:/opt/bcftools:/opt/htslib:/opt/imputationserver-utils/target:$PATH
+	export BCFTOOLS_PLUGINS=/opt/bcftools/plugins
+	export PERL5LIB=/opt/vcftools/src/perl/
+%files
+	files/bin/minimac4 /opt
+	files/bin/impute5_v1.2.0.zip /opt
+	files/bin/trace /opt
+	files/bin/vcf2geno /opt
+%post
+	DEBIAN_FRONTEND="noninteractive" apt update
+	DEBIAN_FRONTEND="noninteractive" apt install -y locales gnupg software-properties-common git curl
+	DEBIAN_FRONTEND="noninteractive" apt-add-repository universe
+	DEBIAN_FRONTEND="noninteractive" apt-get update
+	DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential
+	DEBIAN_FRONTEND="noninteractive" apt-get install -y autoconf automake gdb libffi-dev zlib1g-dev libssl-dev default-jdk default-jre maven python3-pip vim wget moreutils make gcc perl libbz2-dev liblzma-dev libcurl4-gnutls-dev libperl-dev libgsl0-dev python3-dev libgmp-dev libmpfr-dev libhdf5-dev hdf5-tools bedtools pkg-config zip unzip libxau-dev libgsl-dev maven
+
+	# vcftools
+	cd /opt
+	git clone https://github.com/vcftools/vcftools.git
+	cd vcftools
+	./autogen.sh
+	./configure --prefix=/usr/local/bin
+	make
+	make install
+	
+	# SHAPEIT5
+	cd /opt
+	mkdir shapeit_5.1.1
+	cd shapeit_5.1.1
+	wget https://github.com/odelaneau/shapeit5/releases/download/v5.1.1/ligate_static
+	wget https://github.com/odelaneau/shapeit5/releases/download/v5.1.1/phase_common_static
+	wget https://github.com/odelaneau/shapeit5/releases/download/v5.1.1/phase_rare_static
+	wget https://github.com/odelaneau/shapeit5/releases/download/v5.1.1/simulate_static
+	wget https://github.com/odelaneau/shapeit5/releases/download/v5.1.1/switch_static
+	wget https://github.com/odelaneau/shapeit5/releases/download/v5.1.1/xcftools_static
+
+	# liftover chain files
+	cd /opt
+	mkdir chains
+	cd chains
+	wget http://hgdownload.cse.ucsc.edu/goldenpath/hg19/liftOver/hg19ToHg38.over.chain.gz
+	wget http://hgdownload.cse.ucsc.edu/goldenpath/hg38/liftOver/hg38ToHg19.over.chain.gz
+
+	# IMPUTE5
+	cd /opt
+	unzip impute5_v1.2.0.zip
+
+	# Beagle 5.4
+	cd /opt
+	mkdir beagle_5.4
+	cd beagle_5.4
+	wget https://faculty.washington.edu/browning/beagle/beagle.29Oct24.c8e.jar
+	ln -s /opt/beagle_5.4/beagle.29Oct24.c8e.jar /opt/beagle_5.4/beagle.jar
+
+	# Eagle 2.4.1
+	cd /opt
+	mkdir eagle_2.4.1
+	cd eagle_2.4.1
+	wget https://storage.googleapis.com/broad-alkesgroup-public/Eagle/downloads/Eagle_v2.4.1.tar.gz
+	tar -zxf Eagle_v2.4.1.tar.gz --no-same-owner
+	mv Eagle_v2.4.1/eagle .
+	rm -rf Eagle_v2.4.1 Eagle_v2.4.1.tar.gz
+
+	# bcftools
+	cd /opt
+	git clone --recurse-submodules https://github.com/samtools/htslib.git
+	cd htslib
+	make
+	cd /opt
+	git clone https://github.com/samtools/bcftools.git
+	cd bcftools
+	make
+
+	# imputationserver-utils
+	cd /opt
+	git clone -b dev https://github.com/hmgu-itg/imputationserver-utils.git
+	cd imputationserver-utils
+	mvn -Dmaven.test.skip=true package
+
+	# --R--
+	# apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+	# add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+	# apt update
+	# DEBIAN_FRONTEND="noninteractive" apt install -y r-base
+	# Rscript --vanilla -e "install.packages(c(\"gsalib\",\"ggplot2\",\"reshape\",\"data.table\"),repos = \"http://cran.us.r-project.org\")"
