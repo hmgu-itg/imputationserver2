@@ -19,7 +19,7 @@ From: ubuntu:24.04
 	DEBIAN_FRONTEND="noninteractive" apt-add-repository universe
 	DEBIAN_FRONTEND="noninteractive" apt-get update
 	DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential
-	DEBIAN_FRONTEND="noninteractive" apt-get install -y autoconf automake gdb libffi-dev zlib1g-dev libssl-dev default-jdk default-jre maven python3-pip vim wget moreutils make gcc perl libbz2-dev liblzma-dev libcurl4-gnutls-dev libperl-dev libgsl0-dev python3-dev libgmp-dev libmpfr-dev libhdf5-dev hdf5-tools bedtools pkg-config zip unzip libxau-dev libgsl-dev maven
+	DEBIAN_FRONTEND="noninteractive" apt-get install -y autoconf automake gdb libffi-dev zlib1g-dev libssl-dev openjdk-21-jdk openjdk-21-jre maven python3-pip vim wget moreutils make gcc perl libbz2-dev liblzma-dev libcurl4-gnutls-dev libperl-dev libgsl0-dev python3-dev libgmp-dev libmpfr-dev libhdf5-dev hdf5-tools bedtools pkg-config zip unzip libxau-dev libgsl-dev maven
 
 	# vcftools
 	cd /opt
@@ -85,8 +85,8 @@ From: ubuntu:24.04
 	mvn -Dmaven.test.skip=true package
 
 	# --R--
-	# apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-	# add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
-	# apt update
-	# DEBIAN_FRONTEND="noninteractive" apt install -y r-base
-	# Rscript --vanilla -e "install.packages(c(\"gsalib\",\"ggplot2\",\"reshape\",\"data.table\"),repos = \"http://cran.us.r-project.org\")"
+	apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+	add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+	apt update
+	DEBIAN_FRONTEND="noninteractive" apt install -y r-base
+	Rscript --vanilla -e "install.packages(c(\"markdown\",\"ggplot2\",\"htmltools\",\"dplyr\",\"dt\",\"tidyr\",\"rmdformats\"),repos = \"http://cran.us.r-project.org\")"
