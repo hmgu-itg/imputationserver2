@@ -19,7 +19,13 @@ From: ubuntu:24.04
 	DEBIAN_FRONTEND="noninteractive" apt-add-repository universe
 	DEBIAN_FRONTEND="noninteractive" apt-get update
 	DEBIAN_FRONTEND="noninteractive" apt-get install -y build-essential
-	DEBIAN_FRONTEND="noninteractive" apt-get install -y autoconf automake gdb libffi-dev zlib1g-dev libssl-dev openjdk-21-jdk openjdk-21-jre maven python3-pip vim wget moreutils make gcc perl libbz2-dev liblzma-dev libcurl4-gnutls-dev libperl-dev libgsl0-dev python3-dev libgmp-dev libmpfr-dev libhdf5-dev hdf5-tools bedtools pkg-config zip unzip libxau-dev libgsl-dev maven
+	DEBIAN_FRONTEND="noninteractive" apt-get install -y autoconf automake gdb libffi-dev zlib1g-dev libssl-dev openjdk-21-jdk openjdk-21-jre maven python3-pip vim wget moreutils make gcc perl libbz2-dev liblzma-dev libcurl4-gnutls-dev libperl-dev libgsl0-dev python3-dev libgmp-dev libmpfr-dev libhdf5-dev hdf5-tools bedtools pkg-config zip unzip libxau-dev libgsl-dev maven p7zip-full pandoc
+
+	# csvtk
+	cd /opt
+	wget https://github.com/shenwei356/csvtk/releases/download/v0.36.0/csvtk_linux_amd64.tar.gz
+	tar -zxvf csvtk_linux_amd64.tar.gz
+	rm csvtk_linux_amd64.tar.gz
 
 	# vcftools
 	cd /opt
