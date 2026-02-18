@@ -1,6 +1,6 @@
 process MINIMAC4 {
 
-    scratch '/mnt/storage/localstorage'
+    //scratch '/mnt/storage/localstorage'
     
     label 'imputation'
     tag "${chunkfile}"
