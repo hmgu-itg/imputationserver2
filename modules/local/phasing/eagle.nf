@@ -1,6 +1,6 @@
 process EAGLE {
 
-    scratch '/mnt/storage/localstorage'
+    //scratch '/mnt/storage/localstorage'
 
     label 'phasing'
     tag "${chunkfile}"
