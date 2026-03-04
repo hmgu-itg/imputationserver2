@@ -13,6 +13,9 @@ From: ubuntu:24.04
 	files/bin/impute5_v1.2.0.zip /opt
 	files/bin/trace /opt
 	files/bin/vcf2geno /opt
+	files/hg19ToHg38.over.chain.gz /opt
+	files/hg38ToHg19.over.chain.gz /opt
+	
 %post
 	DEBIAN_FRONTEND="noninteractive" apt update
 	DEBIAN_FRONTEND="noninteractive" apt install -y locales gnupg software-properties-common git curl
@@ -50,9 +53,10 @@ From: ubuntu:24.04
 	# liftover chain files
 	cd /opt
 	mkdir chains
-	cd chains
-	wget http://hgdownload.cse.ucsc.edu/goldenpath/hg19/liftOver/hg19ToHg38.over.chain.gz
-	wget http://hgdownload.cse.ucsc.edu/goldenpath/hg38/liftOver/hg38ToHg19.over.chain.gz
+	mv hg19ToHg38.over.chain.gz chains/
+	mv hg38ToHg19.over.chain.gz chains/
+	#wget http://hgdownload.cse.ucsc.edu/goldenpath/hg19/liftOver/hg19ToHg38.over.chain.gz
+	#wget http://hgdownload.cse.ucsc.edu/goldenpath/hg38/liftOver/hg38ToHg19.over.chain.gz
 
 	# IMPUTE5
 	cd /opt
