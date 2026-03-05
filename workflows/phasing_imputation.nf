@@ -36,7 +36,7 @@ workflow PHASING_IMPUTATION {
                     }
                 return tuple(it.toString(),genotypes_file);
         }
-    phased_m3vcf_ch = phased_ch.combine(minimac_m3vcf_ch, by: 0)
+//    phased_m3vcf_ch = phased_ch.combine(minimac_m3vcf_ch, by: 0)
 //        EAGLE ( eagle_bcf_metafiles_ch, phasing_map_ch )
 //        phased_ch = EAGLE.out.eagle_phased_ch
 
