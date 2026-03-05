@@ -1,4 +1,5 @@
 process EAGLE_MINIMAC {
+
     label 'phasing_imputation'
     tag "${chunkfile}"
     
@@ -17,7 +18,6 @@ process EAGLE_MINIMAC {
     val minRecombination
 
     output:
-    //tuple val(chr), val(start), val(end), val(phasing_status), file("*.phased.vcf.gz"), emit: eagle_phased_ch
     tuple val(chr_cleaned), val(start), val(end), file("*.dose.vcf.gz"), file("*.info.gz"), file("*.empiricalDose.vcf.gz"), emit: em_imputed_chunks
 
     script:
@@ -38,44 +38,14 @@ process EAGLE_MINIMAC {
     prob_threshold = probThreshold != -1 ? '--prob-threshold ' + probThreshold : ''
     prob_threshold_s1 = probThresholdS1 != -1 ? '--prob-threshold-s1 ' + probThresholdS1 : ''
     min_recom = minRecombination != -1 ? '--min-recom ' + minRecombination : ''
-    //chunkfile_name = chunkfile.toString().replaceAll('.vcf.gz', '')
 
     """
     tabix $chunkfile
-    eagle \
-        --vcfRef ${bcf}  \
-        --vcfTarget ${chunkfile} \
-        --geneticMapFile ${map_eagle} \
-        --outPrefix ${chunkfile_name}.phased \
-        --chrom $chr_mapped \
-        --bpStart $phasing_start \
-        --bpEnd $phasing_end \
-        --allowRefAltSwap \
-        --vcfOutFormat z \
-        --keepMissingPloidyX \
-        --numThreads $used_threads
+
+    eagle --vcfRef ${bcf} --vcfTarget ${chunkfile} --geneticMapFile ${map_eagle} --outPrefix ${chunkfile_name}.phased --chrom $chr_mapped --bpStart $phasing_start --bpEnd $phasing_end --allowRefAltSwap --vcfOutFormat z --keepMissingPloidyX --numThreads $used_threads
 
     tabix $chunkfile2
-    minimac4 \
-        --region $chr_mapped:$start-$end \
-        --overlap $minimac_window \
-        --format GT,DS,GP,HDS \
-        --min-ratio $minimac_min_ratio \
-        --all-typed-sites \
-        --sites ${chunkfile_name}.info.gz \
-        --empirical-output ${chunkfile_name}.empiricalDose.vcf.gz \
-        --output ${chunkfile_name}.dose.vcf.gz \
-        --output-format vcf.gz \
-        --threads $used_threads \
-        --decay $decay \
-        --temp-prefix ./ \
-        $diff_threshold \
-        $prob_threshold \
-        $prob_threshold_s1 \
-        $min_recom \
-        $r2_filter \
-        $map \
-        ${m3vcf} \
-        ${chunkfile2}
+
+    minimac4 --region $chr_mapped:$start-$end --overlap $minimac_window --format GT,DS,GP,HDS --min-ratio $minimac_min_ratio --all-typed-sites --sites ${chunkfile_name}.info.gz --empirical-output ${chunkfile_name}.empiricalDose.vcf.gz --output ${chunkfile_name}.dose.vcf.gz --output-format vcf.gz --threads $used_threads --decay $decay --temp-prefix ./ $diff_threshold $prob_threshold $prob_threshold_s1 $min_recom $r2_filter $map ${m3vcf} ${chunkfile2}
     """
 }
