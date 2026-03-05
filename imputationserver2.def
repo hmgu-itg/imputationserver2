@@ -55,8 +55,12 @@ From: ubuntu:24.04
 	mkdir chains
 	mv hg19ToHg38.over.chain.gz chains/
 	mv hg38ToHg19.over.chain.gz chains/
-	#wget http://hgdownload.cse.ucsc.edu/goldenpath/hg19/liftOver/hg19ToHg38.over.chain.gz
-	#wget http://hgdownload.cse.ucsc.edu/goldenpath/hg38/liftOver/hg38ToHg19.over.chain.gz
+
+	# fix access rights
+	chmod o+rx /opt/vcftools
+	chmod o+rx /opt/minimac4
+	chmod o+r /opt/chains/hg19ToHg38.over.chain.gz
+	chmod o+r /opt/chains/hg38ToHg19.over.chain.gz
 
 	# IMPUTE5
 	cd /opt
