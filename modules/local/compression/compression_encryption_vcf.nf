@@ -4,6 +4,8 @@ process COMPRESSION_ENCRYPTION_VCF {
     publishDir params.output, mode: 'copy'
     tag "Merge Chromosome ${chr}"
 
+    maxForks params.max_concur_encrypt
+
     input:
     tuple val(chr), val(start), val(end), path(imputed_vcf_data), path(imputed_info), path(imputed_meta_vcf_data)
 
