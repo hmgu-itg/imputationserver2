@@ -1,6 +1,4 @@
-include { EAGLE } from '../modules/local/phasing/eagle'
-include { BEAGLE } from '../modules/local/phasing/beagle'
-include { MINIMAC4 } from '../modules/local/imputation/minimac4'
+include { EAGLE_MINIMAC } from '../modules/local/phasing/eagle_minimac'
 
 workflow PHASING_IMPUTATION {
     take: 
@@ -21,12 +19,16 @@ workflow PHASING_IMPUTATION {
                     return tuple(it.toString(),eagle_file,eagle_file_index)
             }
         eagle_bcf_metafiles_ch = phasing_reference_ch.combine(metafiles_ch, by: 0)
+        EAGLE ( eagle_bcf_metafiles_ch, phasing_map_ch )
+        phased_ch = EAGLE.out.eagle_phased_ch
+
     // imputation
     if (params.refpanel.mapMinimac == null) {
         minimac_map = []
     } else {
         minimac_map = file(params.refpanel.mapMinimac, checkIfExists: true)
     }
+
     minimac_m3vcf_ch = chromosomes
         .map {
             it ->
@@ -36,14 +38,9 @@ workflow PHASING_IMPUTATION {
                     }
                 return tuple(it.toString(),genotypes_file);
         }
-//    phased_m3vcf_ch = phased_ch.combine(minimac_m3vcf_ch, by: 0)
-//        EAGLE ( eagle_bcf_metafiles_ch, phasing_map_ch )
-//        phased_ch = EAGLE.out.eagle_phased_ch
-
-
+    phased_m3vcf_ch = phased_ch.combine(minimac_m3vcf_ch, by: 0)
     MINIMAC4 (
-//        phased_m3vcf_ch,
-EAGLE ( eagle_bcf_metafiles_ch, phasing_map_ch ).out.eagle_phased_ch.combine(minimac_m3vcf_ch, by: 0),
+        phased_m3vcf_ch,
         minimac_map,
         params.refpanel.build,
         params.imputation.window,
