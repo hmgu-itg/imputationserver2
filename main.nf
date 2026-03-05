@@ -99,29 +99,18 @@ workflow {
        } 
 
         if (params.mode == 'imputation') {
-
-            phased_ch =  QUALITY_CONTROL.out.qc_metafiles
-
             if (phasing_engine != 'no_phasing') { 
-
-                PHASING(
-                    QUALITY_CONTROL.out.qc_metafiles
-                )
-
-                phased_ch = PHASING.out.phased_ch
-
-            }
-                 
-            IMPUTATION(
-                phased_ch
-            )
-            
+                PHASING_IMPUTATION(QUALITY_CONTROL.out.qc_metafiles)
             if (params.merge_results === true) {
-                ENCRYPTION(
-                    IMPUTATION.out.groupTuple()
-                )
+                ENCRYPTION(PHASING_IMPUTATION.out.groupTuple())
             }
-            
+            }
+	    else{     
+            IMPUTATION(QUALITY_CONTROL.out.qc_metafiles)
+            if (params.merge_results === true) {
+                ENCRYPTION(IMPUTATION.out.groupTuple())
+            }
+            }   
         }
     }
     
