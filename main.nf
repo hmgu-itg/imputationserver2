@@ -74,6 +74,7 @@ site_files_ch = Channel.of(1..22, 'X', 'MT')
 include { INPUT_VALIDATION } from './workflows/input_validation'
 include { QUALITY_CONTROL } from './workflows/quality_control'
 include { PHASING } from './workflows/phasing'
+include { PHASING_IMPUTATION } from './workflows/phasing_imputation'
 include { IMPUTATION } from './workflows/imputation'
 include { ENCRYPTION } from './workflows/encryption'
 include { ANCESTRY_ESTIMATION } from './workflows/ancestry_estimation'
