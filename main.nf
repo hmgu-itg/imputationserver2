@@ -105,6 +105,7 @@ workflow {
             if (params.merge_results === true) {
                 ENCRYPTION(PHASING_IMPUTATION.out.groupTuple())
             }
+		}
             }
 	    else{     
             IMPUTATION(QUALITY_CONTROL.out.qc_metafiles)
@@ -113,7 +114,6 @@ workflow {
             }
             }   
         }
-    }
     
     // handles empty objects (e.g. cloudgene)
     ancestry_enabled = params.ancestry != null && params.ancestry != "" && params.ancestry.enabled
@@ -123,14 +123,11 @@ workflow {
     }
 
     if (params.pgs.enabled) {
-
         PGS_CALCULATION(
             IMPUTATION.out,
             ancestry_enabled ? ANCESTRY_ESTIMATION.out : Channel.empty()
-        )
-        
-    }
-    
+        )   
+    }   
 }
 
 workflow.onComplete {
