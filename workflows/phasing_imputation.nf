@@ -42,10 +42,12 @@ workflow PHASING_IMPUTATION {
         params.imputation.diff_threshold,
         params.imputation.prob_threshold,
         params.imputation.prob_threshold_s1,
-        params.imputation.min_recom
-	)
+        params.imputation.min_recom)
+
+    imputed_chunks = EAGLE_MINIMAC.out.em_imputed_chunks
+    }
 
     emit:
-    imputed_chunks = EAGLE_MINIMAC.out.em_imputed_chunks
+    imputed_chunks
 
 }
