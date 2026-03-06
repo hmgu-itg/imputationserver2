@@ -1,7 +1,7 @@
-id: imputationserver2
+id: imputationserver2.1.4
 name: Genotype Imputation
 description: This is the new Helmholtz Munich Imputation Server
-version: 2.1.3
+version: 2.1.4
 website: https://imputationserver.readthedocs.io
 category: Application
 submitButton: Start Imputation
@@ -57,6 +57,10 @@ workflow:
         - process: "PHASING:EAGLE"
           view: progressbar
           label: "Phasing with Eagle"
+          group: "imputation"
+        - process: "PHASING_IMPUTATION:EAGLE_MINIMAC"
+          view: progressbar
+          label: "Phasing/Imputing with Eagle/Minimac4"
           group: "imputation"
         - process: "PHASING:BEAGLE"
           view: progressbar
