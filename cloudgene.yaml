@@ -163,6 +163,36 @@ workflow:
       visible: false
       type: text
 
+    - id: jobid
+      description: Job ID
+      value:
+      visible: false
+      type: text
+
+    - id: total_chunks
+      description: total chunks
+      value:
+      visible: false
+      type: text
+
+    - id: cur_chunk
+      description: current chunk
+      value:
+      visible: false
+      type: text
+
+    - id: lws
+      description: LWS
+      value:
+      visible: false
+      type: text
+
+    - id: hws
+      description: HWS
+      value:
+      visible: false
+      type: text
+
     - id: check1
       description: I will not attempt to re-identify or contact research participants.
       type: terms_checkbox
