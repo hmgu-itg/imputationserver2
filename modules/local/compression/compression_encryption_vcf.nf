@@ -1,5 +1,4 @@
 process COMPRESSION_ENCRYPTION_VCF {
-
     label 'postprocessing'
     publishDir params.output, mode: 'copy'
     tag "Merge Chromosome ${chr}"

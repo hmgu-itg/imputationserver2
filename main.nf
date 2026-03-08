@@ -74,6 +74,7 @@ site_files_ch = Channel.of(1..22, 'X', 'MT')
 include { INPUT_VALIDATION } from './workflows/input_validation'
 include { QUALITY_CONTROL } from './workflows/quality_control'
 include { PHASING } from './workflows/phasing'
+include { PHASING_IMPUTATION } from './workflows/phasing_imputation'
 include { IMPUTATION } from './workflows/imputation'
 include { ENCRYPTION } from './workflows/encryption'
 include { ANCESTRY_ESTIMATION } from './workflows/ancestry_estimation'
@@ -99,31 +100,20 @@ workflow {
        } 
 
         if (params.mode == 'imputation') {
-
-            phased_ch =  QUALITY_CONTROL.out.qc_metafiles
-
             if (phasing_engine != 'no_phasing') { 
-
-                PHASING(
-                    QUALITY_CONTROL.out.qc_metafiles
-                )
-
-                phased_ch = PHASING.out.phased_ch
-
-            }
-                 
-            IMPUTATION(
-                phased_ch
-            )
-            
+                PHASING_IMPUTATION(QUALITY_CONTROL.out.qc_metafiles)
             if (params.merge_results === true) {
-                ENCRYPTION(
-                    IMPUTATION.out.groupTuple()
-                )
+                ENCRYPTION(PHASING_IMPUTATION.out.groupTuple())
             }
-            
+		}
+            }
+	    else{     
+            IMPUTATION(QUALITY_CONTROL.out.qc_metafiles)
+            if (params.merge_results === true) {
+                ENCRYPTION(IMPUTATION.out.groupTuple())
+            }
+            }   
         }
-    }
     
     // handles empty objects (e.g. cloudgene)
     ancestry_enabled = params.ancestry != null && params.ancestry != "" && params.ancestry.enabled
@@ -133,14 +123,11 @@ workflow {
     }
 
     if (params.pgs.enabled) {
-
         PGS_CALCULATION(
             IMPUTATION.out,
             ancestry_enabled ? ANCESTRY_ESTIMATION.out : Channel.empty()
-        )
-        
-    }
-    
+        )   
+    }   
 }
 
 workflow.onComplete {
