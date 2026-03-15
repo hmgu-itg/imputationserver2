@@ -60,7 +60,7 @@ workflow:
           group: "imputation"
         - process: "PHASING_IMPUTATION:EAGLE_MINIMAC"
           view: progressbar
-          label: "Phasing/Imputing with Eagle/Minimac4"
+          label: "Phasing / Imputing with Eagle / Minimac4"
           group: "imputation"
         - process: "PHASING:BEAGLE"
           view: progressbar
@@ -177,6 +177,12 @@ workflow:
 
     - id: cur_chunk
       description: current chunk
+      value:
+      visible: false
+      type: text
+
+    - id: nsamples
+      description: number of samples
       value:
       visible: false
       type: text
