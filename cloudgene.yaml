@@ -1,7 +1,7 @@
-id: imputationserver2.1.5
+id: imputationserver2.1.6
 name: Genotype Imputation
 description: This is the new Helmholtz Munich Imputation Server
-version: 2.1.5
+version: 2.1.6
 website: https://imputationserver.readthedocs.io
 category: Application
 submitButton: Start Imputation
