@@ -29,10 +29,10 @@ process EAGLE_MINIMAC {
     def phasing_start = start.toLong() - params.phasing.window
     phasing_start = phasing_start < 0 ? 1 : phasing_start
     def phasing_end = end.toLong() + params.phasing.window
-    def minimac_temp=task.scratch
     def used_threads = params.service.threads != -1 ? params.service.threads : task.cpus
     def phased_chunk="${chunkfile.getBaseName(2)}.phased.vcf.gz"
     // minimac4
+    def minimac_temp=task.scratch
     map = minimac_map ? '--map ' + minimac_map : ''
     r2_filter = min_r2 != 0 ? '--min-r2 ' + min_r2 : ''
     diff_threshold = diffThreshold != -1 ? '--diff-threshold ' + diffThreshold : ''
