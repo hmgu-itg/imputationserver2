@@ -29,7 +29,7 @@ process EAGLE_MINIMAC {
     def phasing_start = start.toLong() - params.phasing.window
     phasing_start = phasing_start < 0 ? 1 : phasing_start
     def phasing_end = end.toLong() + params.phasing.window
-    def minimac_temp=process.scratch
+    def minimac_temp=task.scratch
     def used_threads = params.service.threads != -1 ? params.service.threads : task.cpus
     def phased_chunk="${chunkfile.getBaseName(2)}.phased.vcf.gz"
     // minimac4
