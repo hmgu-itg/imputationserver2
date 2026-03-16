@@ -29,6 +29,7 @@ process EAGLE_MINIMAC {
     def phasing_start = start.toLong() - params.phasing.window
     phasing_start = phasing_start < 0 ? 1 : phasing_start
     def phasing_end = end.toLong() + params.phasing.window
+    def minimac_temp=process.scratch
     def used_threads = params.service.threads != -1 ? params.service.threads : task.cpus
     def phased_chunk="${chunkfile.getBaseName(2)}.phased.vcf.gz"
     // minimac4
@@ -46,6 +47,6 @@ process EAGLE_MINIMAC {
 
     tabix $phased_chunk
 
-    minimac4 --region $chr_mapped:$start-$end --overlap $minimac_window --format GT,DS,GP,HDS --min-ratio $minimac_min_ratio --all-typed-sites --sites ${chunkfile_name}.info.gz --empirical-output ${chunkfile_name}.empiricalDose.vcf.gz --output ${chunkfile_name}.dose.vcf.gz --output-format vcf.gz --threads $used_threads --decay $decay --temp-prefix ./ $diff_threshold $prob_threshold $prob_threshold_s1 $min_recom $r2_filter $map ${m3vcf} ${phased_chunk}
+    minimac4 --region $chr_mapped:$start-$end --overlap $minimac_window --format GT,DS,GP,HDS --min-ratio $minimac_min_ratio --all-typed-sites --sites ${chunkfile_name}.info.gz --empirical-output ${chunkfile_name}.empiricalDose.vcf.gz --output ${chunkfile_name}.dose.vcf.gz --output-format vcf.gz --threads $used_threads --decay $decay --temp-prefix $minimac_temp $diff_threshold $prob_threshold $prob_threshold_s1 $min_recom $r2_filter $map ${m3vcf} ${phased_chunk}
     """
 }
